@@ -1,0 +1,51 @@
+Partie 2 : Exercices à réaliser
+Maintenant que vous avez créé cette base de données, voici les opérations que vous devez implémenter :
+A. Triggers
+
+Créez un trigger after_emprunt_insert qui diminue automatiquement le nombre d'exemplaires disponibles d'un livre après un emprunt.
+Créez un trigger after_emprunt_update qui augmente le nombre d'exemplaires disponibles lorsqu'un livre est retourné (quand la date_retour_effective est mise à jour).
+Créez un trigger before_emprunt_insert qui vérifie si le membre a déjà atteint la limite de 5 emprunts simultanés. Si oui, empêchez l'emprunt.
+
+B. Fonctions
+
+Créez une fonction calculer_amende(id_emprunt_param INT) qui calcule automatiquement le montant de l'amende basé sur le nombre de jours de retard (2€ par jour de retard).
+Créez une fonction nombre_emprunts_membre(id_membre_param INT) qui retourne le nombre d'emprunts en cours pour un membre donné.
+Créez une fonction disponibilite_livre(id_livre_param INT) qui retourne le statut de disponibilité d'un livre ('Disponible', 'Emprunté', 'Dernier exemplaire').
+
+C. Procédures stockées
+
+Créez une procédure emprunter_livre(IN id_livre_param INT, IN id_membre_param INT, IN duree_jours INT) qui gère tout le processus d'emprunt d'un livre, y compris les vérifications nécessaires et la mise à jour des tables.
+Créez une procédure retourner_livre(IN id_emprunt_param INT) qui gère le retour d'un livre, met à jour la date de retour et calcule les amendes si nécessaire.
+Créez une procédure ajouter_exemplaires(IN id_livre_param INT, IN nombre INT) qui ajoute un certain nombre d'exemplaires à un livre existant.
+
+D. Transactions
+
+Implémentez une transaction qui effectue les opérations suivantes de manière atomique :
+
+Ajout d'un nouveau livre avec ses informations
+Association avec un ou plusieurs auteurs
+Ajout d'un certain nombre d'exemplaires
+
+
+Implémentez une transaction pour gérer le processus de réservation qui :
+
+Vérifie si le livre est disponible
+Si non, ajoute une réservation
+Si oui, transforme directement la réservation en emprunt
+
+
+
+E. Requêtes complexes
+
+Écrivez une requête qui liste les 10 livres les plus empruntés durant les 6 derniers mois.
+Écrivez une requête qui calcule le montant total des amendes perçues par catégorie de livre.
+Écrivez une requête qui identifie les membres ayant des emprunts en retard de plus de 30 jours.
+
+Partie 3 : Défi supplémentaire
+Implémentez un système de notification qui utilise des triggers et une table de notifications pour alerter les membres lorsque :
+
+Un livre qu'ils ont réservé devient disponible
+La date de retour de leur emprunt approche (3 jours avant)
+Ils ont une amende non payée depuis plus de 15 jours
+
+Pour ce faire, vous devrez créer une nouvelle table notifications et les triggers appropriés.

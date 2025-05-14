@@ -1,0 +1,84 @@
+-- Création de la base de données
+CREATE DATABASE bibliotheque_universitaire;
+USE bibliotheque_universitaire;
+
+-- Table des catégories de livres
+CREATE TABLE categories (
+    id_categorie INT PRIMARY KEY AUTO_INCREMENT,
+    nom_categorie VARCHAR(50) NOT NULL,
+    description TEXT
+);
+
+-- Table des auteurs
+CREATE TABLE auteurs (
+    id_auteur INT PRIMARY KEY AUTO_INCREMENT,
+    nom VARCHAR(50) NOT NULL,
+    prenom VARCHAR(50) NOT NULL,
+    date_naissance DATE,
+    nationalite VARCHAR(50)
+);
+
+-- Table des livres
+CREATE TABLE livres (
+    id_livre INT PRIMARY KEY AUTO_INCREMENT,
+    titre VARCHAR(100) NOT NULL,
+    id_categorie INT,
+    annee_publication INT,
+    isbn VARCHAR(20) UNIQUE,
+    nombre_exemplaires INT DEFAULT 0,
+    FOREIGN KEY (id_categorie) REFERENCES categories(id_categorie)
+);
+
+-- Table de relation entre livres et auteurs (un livre peut avoir plusieurs auteurs)
+CREATE TABLE livre_auteur (
+    id_livre INT,
+    id_auteur INT,
+    PRIMARY KEY (id_livre, id_auteur),
+    FOREIGN KEY (id_livre) REFERENCES livres(id_livre),
+    FOREIGN KEY (id_auteur) REFERENCES auteurs(id_auteur)
+);
+
+-- Table des membres de la bibliothèque
+CREATE TABLE membres (
+    id_membre INT PRIMARY KEY AUTO_INCREMENT,
+    nom VARCHAR(50) NOT NULL,
+    prenom VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE,
+    telephone VARCHAR(20),
+    date_inscription DATE DEFAULT CURRENT_DATE,
+    statut ENUM('étudiant', 'professeur', 'personnel') NOT NULL,
+    est_actif BOOLEAN DEFAULT TRUE
+);
+
+-- Table des emprunts
+CREATE TABLE emprunts (
+    id_emprunt INT PRIMARY KEY AUTO_INCREMENT,
+    id_livre INT,
+    id_membre INT,
+    date_emprunt DATE NOT NULL DEFAULT CURRENT_DATE,
+    date_retour_prevue DATE NOT NULL,
+    date_retour_effective DATE,
+    FOREIGN KEY (id_livre) REFERENCES livres(id_livre),
+    FOREIGN KEY (id_membre) REFERENCES membres(id_membre)
+);
+
+-- Table des amendes pour retard
+CREATE TABLE amendes (
+    id_amende INT PRIMARY KEY AUTO_INCREMENT,
+    id_emprunt INT,
+    montant DECIMAL(10,2) NOT NULL,
+    date_amende DATE DEFAULT CURRENT_DATE,
+    est_payee BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (id_emprunt) REFERENCES emprunts(id_emprunt)
+);
+
+-- Table des réservations
+CREATE TABLE reservations (
+    id_reservation INT PRIMARY KEY AUTO_INCREMENT,
+    id_livre INT,
+    id_membre INT,
+    date_reservation DATE DEFAULT CURRENT_DATE,
+    statut ENUM('en attente', 'disponible', 'annulée', 'terminée') DEFAULT 'en attente',
+    FOREIGN KEY (id_livre) REFERENCES livres(id_livre),
+    FOREIGN KEY (id_membre) REFERENCES membres(id_membre)
+);
